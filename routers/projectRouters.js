@@ -4,34 +4,35 @@ const projectModel = require('./projectModel.js');
 
 const router = express.Router();
 
-router.get('/:id', validateProjectId, (req, res) => {
-  const { id } = req.params;
-  projectModel.getProjectById(id)
-    .then(project => {
-      if (project) {
-        res.json(project);
-      }
+router.post('/', (req, res) => {
+  const project = req.body;
+  projectModel.addProject(project)
+  .then(project => {
+    res.json(project);
+  })
+})
+
+router.get('/', (req, res) => {
+  projectModel.getProjects()
+    .then(projects => {
+      projects.map(proj => {
+        if (proj.completed === 0) {
+          proj.completed = 'false';
+        }
+      })
+        res.json(projects);
     })
     .catch(err => {
-      res.status(500).json({ errorMessage: 'Failed to get project' });
+      res.status(500).json({ errorMessage: 'Failed to get projects from database' });
     });
 });
 
 //Middleware
 
-function validateProjectId(req, res, next) {
-  const id = req.params.id;
-  projectModel.getProjectById(id)
-    .then(project => {
-      if (project[0]) {
-        console.log('id validated');
-      }
-    })
-    .catch(err => {
-      res.status(400).json({ errorMessage: 'project id is invalid' });
-    })
-  next();
+function validateProject(req, res, next) {
+  
 };
+
 module.exports = router;
 
 
