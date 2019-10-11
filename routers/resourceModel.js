@@ -11,8 +11,8 @@ function addResource(resource) {
 }
 
 function getResources(id) {
-    return db('projects as r')
-        .join('resources as i', 'i.project_id', 'r.id')
-        .select('i.name', 'i.quantity')
+    return db('projects as p')
+        .join('resources as r', 'r.project_id', 'p.id')
+        .select('r.id', 'r.name', 'r.description')
         .where({ project_id: id })
 }

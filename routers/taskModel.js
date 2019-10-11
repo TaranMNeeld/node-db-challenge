@@ -11,7 +11,8 @@ function addTask(task) {
 }
 
 function getTasks(id) {
-    return db('projects')
-        .select('tasks')
-        .where({ id })
+    return db('projects as p')
+        .join('tasks as t', 't.project_id', 'p.id')
+        .select('t.id', 't.project_id', 't.description', 't.notes', 't.completed')
+        .where({ project_id: id })
 }
