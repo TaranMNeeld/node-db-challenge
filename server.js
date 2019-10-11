@@ -8,6 +8,6 @@ const server = express();
 server.use(helmet());
 server.use(express.json());
 
-server.use("/api/project", RecipeRouter);
+server.use("/api/project", projectRouters);
 
 module.exports = server;
